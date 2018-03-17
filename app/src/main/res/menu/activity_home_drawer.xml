@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="all">
+
+        <item
+            android:id="@+id/semester"
+            app:actionLayout="@layout/spinner_2"
+            android:title="Semester"
+            />
+        <item
+            android:id="@+id/year"
+            app:actionLayout="@layout/spinner_3"
+            android:title="Semester"
+            />
+        <item
+            android:id="@+id/course"
+            app:actionLayout="@layout/spinner_test"
+            android:title="Course"
+            />
+
+
+    </group>
+
+    <item android:title="SETTINGS">
+        <menu>
+            <item
+                android:id="@+id/Logout"
+                android:icon="@drawable/signout"
+                android:title="Logout" />
+            <item
+                android:id="@+id/changePassword"
+                android:icon="@drawable/passwordreset"
+                android:title="Change Password" />
+        </menu>
+    </item>
+
+</menu>

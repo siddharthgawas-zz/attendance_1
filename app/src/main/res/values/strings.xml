@@ -1,0 +1,51 @@
+<resources>
+    <string name="app_name">Student App</string>
+    <string name="app_key">test-key</string>
+    <string name="worried_question">Worried about Attendance?</string>
+    <string name="worried_answer">Well... don\'t be. We help you track your attendance in real time.
+    Student App provides your attendance statistics that help you to manage between classes and other co-curricular activities. :P.</string>
+    <string name="follow_developers">Follow Our Developers......</string>
+
+    <string name="shared_preference">org.pccegoa.studentapp.shared_preference</string>
+    <string name="first_run_key">org.pccegoa.studentapp.shared_preference.first_run</string>
+    <string name="user_api_token_key">org.pccegoa.studentapp.shared_preference.api_token</string>
+    <string name="user_id_key">org.pccegoa.studentapp.shared_preference.user_id</string>
+
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_logout">Logout</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="Course">
+        <item>RC 07-08</item>
+        <item>RC 16-17</item>
+    </string-array>
+    <string-array name="Semester">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+    </string-array>
+    <string-array name="Year">
+        <item>2007</item>
+        <item>2008</item>
+        <item>2009</item>
+        <item>2010</item>
+        <item>2011</item>
+        <item>2012</item>
+        <item>2013</item>
+        <item>2014</item>
+        <item>2015</item>
+        <item>2016</item>
+        <item>2017</item>
+        <item>2018</item>
+    </string-array>
+</resources>

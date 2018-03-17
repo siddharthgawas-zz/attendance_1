@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--?xml version="1.0" encoding="UTF-8"?-->
+        <color name="primaryColor">#b71c1c</color>
+        <color name="primaryLightColor">#f05545</color>
+        <color name="primaryDarkColor">#7f0000</color>
+        <color name="secondaryColor">#263238</color>
+        <color name="secondaryLightColor">#4f5b62</color>
+        <color name="secondaryDarkColor">#000a12</color>
+        <color name="primaryTextColor">#ffffff</color>
+        <color name="secondaryTextColor">#ffffff</color>
+    <color name="splashBackground">#c13633</color>
+    <color name="splashBackground2">#3388c1</color>
+    <color name="whatNextButton">#c0ca33</color>
+</resources>
