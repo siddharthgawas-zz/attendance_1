@@ -1,202 +1,43 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:layout_marginTop="20dp"
-    tools:context="org.pccegoa.studentapp.fragment.OVERALL">
+    android:layout_width="match_parent"
+    android:nestedScrollingEnabled="true"
+    >
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp"
+        tools:context="org.pccegoa.studentapp.fragment.OVERALL">
 
 
         <!-- TODO: Update blank fragment layout -->
 
-    <com.github.mikephil.charting.charts.PieChart
-        android:id="@+id/attendanceChart"
-        android:layout_width="match_parent"
-        android:layout_height="320dp"
-        />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TODAY'S ATTENDANCE"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:padding="3px"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="20dp"
-        />
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:nestedScrollingEnabled="true">
-
-        <LinearLayout
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/attendanceChart"
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            />
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:divider="@color/secondaryDarkColor">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:id="@+id/sub1"
-                android:text="abc"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
-                android:id="@+id/status1"
-                android:text="abc"
-                />
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/secondaryColor"/>
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:showDividers="middle"
-    android:layout_marginTop="5dp"
-    android:dividerPadding="5dp"
-    >
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:id="@+id/sub2"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
-        android:text="abc"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:id="@+id/status2"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
-        android:text="abc"
-        />
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/secondaryColor"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:showDividers="middle"
-        android:layout_marginTop="5dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/sub3"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
-            android:text="abc" />
-
-        <TextView
-            android:id="@+id/status3"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
-            android:text="abc" />
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/secondaryColor"/>
-        <LinearLayout
+            android:text="TODAY'S ATTENDANCE"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:padding="3px"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            />
+        <ListView
+            android:id="@+id/att_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:divider="@color/secondaryDarkColor"
-            android:orientation="vertical">
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp">
+        </ListView>
 
-            <TextView
-                android:id="@+id/sub4"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
-                android:text="abc" />
-
-            <TextView
-                android:id="@+id/status4"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
-                android:text="abc" />
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/secondaryColor"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:divider="@color/secondaryDarkColor"
-                android:layout_marginTop="5dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/sub5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
-                    android:text="abc" />
-
-                <TextView
-                    android:id="@+id/status5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
-                    android:text="abc" />
-
-                <View
-                    android:layout_width="fill_parent"
-                    android:layout_height="0.5dp"
-                    android:background="@color/secondaryColor"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginTop="5dp"
-                    android:divider="@color/secondaryDarkColor">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:id="@+id/sub6"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
-                        android:text="abc"
-                        />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:id="@+id/status6"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
-                        android:text="abc"
-                        />
-
-            </LinearLayout>
-
-
-            </LinearLayout>
-
-        </LinearLayout>
 
     </LinearLayout>
-
-
-
-</LinearLayout>
-        </LinearLayout>
-
-
-    </ScrollView>
-
-
-
-
-</LinearLayout>
+</ScrollView>
