@@ -10,6 +10,7 @@
     <string name="first_run_key">org.pccegoa.studentapp.shared_preference.first_run</string>
     <string name="user_api_token_key">org.pccegoa.studentapp.shared_preference.api_token</string>
     <string name="user_id_key">org.pccegoa.studentapp.shared_preference.user_id</string>
+    <string name="user_roll_no">org.pccegoa.studentapp.shared_preference.roll_no</string>
 
     <string name="title_activity_home">HomeActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>

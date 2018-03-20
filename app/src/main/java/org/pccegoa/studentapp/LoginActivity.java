@@ -152,10 +152,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         try {
             String api_key = response.getString("api_token");
             int user_id = response.getInt("user_id");
+            String rollNo = ((EditText)findViewById(R.id.rollNoEditText)).getText().toString();
             SharedPreferences preferences = getSharedPreferences(getString(R.string.shared_preference)
                     ,MODE_PRIVATE);
             preferences.edit().putString(getString(R.string.user_api_token_key),api_key)
-                    .putInt(getString(R.string.user_id_key),user_id).apply();
+                    .putInt(getString(R.string.user_id_key),user_id)
+                    .putString(getString(R.string.user_roll_no),rollNo).apply();
             startActivity(new Intent(this,HomeActivity.class));
             finish();
         } catch (JSONException e) {
