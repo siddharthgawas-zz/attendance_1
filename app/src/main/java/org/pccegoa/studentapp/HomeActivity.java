@@ -3,6 +3,7 @@ package org.pccegoa.studentapp;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -12,16 +13,25 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 
 import org.pccegoa.studentapp.fragment.OVERALL;
 import org.pccegoa.studentapp.fragment.SUBJECT;
 import org.pccegoa.studentapp.fragment.WEEKLY;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity
@@ -30,7 +40,9 @@ public class HomeActivity extends AppCompatActivity
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-
+    private NavigationView mNavigationView = null;
+    private ActionBarDrawerToggle actionBarDrawerToggle = null;
+    DrawerLayout drawer = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,18 +50,14 @@ public class HomeActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-   ;
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
+       drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
+        mNavigationView.setNavigationItemSelectedListener(this);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawer,toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(actionBarDrawerToggle);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -57,8 +65,106 @@ public class HomeActivity extends AppCompatActivity
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+        setUpFilters();
     }
 
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        actionBarDrawerToggle.syncState();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                drawer.openDrawer(Gravity.START);
+                return true;
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void setUpFilters()
+    {
+        Spinner yearSpinner = (Spinner)
+                mNavigationView.getMenu().findItem(R.id.year).getActionView();
+        final Spinner semesterSpinner = (Spinner)
+                mNavigationView.getMenu().findItem(R.id.semester).getActionView();
+        Spinner courseSpinner = (Spinner)
+                mNavigationView.getMenu().findItem(R.id.course).getActionView();
+
+        ArrayList<Integer> years = new ArrayList<>();
+        Calendar calendar = GregorianCalendar.getInstance();
+        int currentYear = calendar.get(Calendar.YEAR);
+        for(int i = currentYear; i >= currentYear - 10;i--)
+            years.add(i);
+        ArrayAdapter<Integer> yearArrayAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_dropdown_item,years);
+        yearSpinner.setAdapter(yearArrayAdapter);
+
+        SharedPreferences preferences = getSharedPreferences(getString(R.string.shared_preference_filters),
+                MODE_PRIVATE);
+
+        String[] courseString = getResources().getStringArray(R.array.Course);
+
+        int year = preferences.getInt(getString(R.string.year_key),currentYear);
+        int semester = preferences.getInt(getString(R.string.semester_key),1);
+        String course = preferences.getString(getString(R.string.course_key),courseString[0]);
+
+
+        yearSpinner.setSelection(yearArrayAdapter.getPosition(year));
+        semesterSpinner.setSelection(((ArrayAdapter<String>)semesterSpinner.getAdapter()).
+                getPosition(""+semester));
+        courseSpinner.setSelection(((ArrayAdapter<String>)courseSpinner.getAdapter()).
+                getPosition(course));
+
+        yearSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                int year = (int)parent.getAdapter().getItem(position);
+                SharedPreferences preferences = getSharedPreferences(getString(R.string.shared_preference_filters),
+                        MODE_PRIVATE);
+                preferences.edit().putInt(getString(R.string.year_key),year).apply();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        semesterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                int semester  = Integer.parseInt((String)parent.getAdapter().getItem(position));
+                SharedPreferences preferences = getSharedPreferences(getString(R.string.shared_preference_filters),
+                        MODE_PRIVATE);
+                preferences.edit().putInt(getString(R.string.semester_key),semester).apply();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        courseSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String course = (String) parent.getAdapter().getItem(position);
+                SharedPreferences preferences = getSharedPreferences(getString(R.string.shared_preference_filters),
+                        MODE_PRIVATE);
+                preferences.edit().putString(getString(R.string.course_key),course).apply();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+    }
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new OVERALL(), "OVERALL");
@@ -78,42 +184,6 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home, menu);
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_logout) {
-            //on logout clear api_token and user id from shared preferences
-            //goto login
-            SharedPreferences preferences = getSharedPreferences(getString(R.string.shared_preference),
-                    MODE_PRIVATE);
-            preferences.edit().remove(getString(R.string.user_api_token_key)).
-                    remove(getString(R.string.user_id_key)).apply();
-            Intent i = new Intent(this,LoginActivity.class);
-            startActivity(i);
-            finish();
-            return true;
-        }
-        if(id==R.id.change_password)
-        {
-            //CHANGE PASSWORD CODE HERE.....
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -122,7 +192,19 @@ public class HomeActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.Logout) {
-            // Handle the camera action
+            //on logout clear api_token and user id from shared preferences
+            //goto login
+            SharedPreferences preferences = getSharedPreferences(getString(R.string.shared_preference),
+                    MODE_PRIVATE);
+            preferences.edit().remove(getString(R.string.user_api_token_key)).
+                    remove(getString(R.string.user_id_key)).remove(getString(R.string.user_roll_no)).apply();
+
+            preferences = getSharedPreferences(getString(R.string.shared_preference_filters),MODE_PRIVATE);
+            preferences.edit().remove(getString(R.string.semester_key)).remove(getString(R.string.year_key))
+                    .remove(getString(R.string.course_key)).apply();
+            Intent i = new Intent(this,LoginActivity.class);
+            startActivity(i);
+            finish();
         } else if (id == R.id.changePassword) {
 
         }

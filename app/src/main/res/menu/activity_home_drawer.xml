@@ -4,8 +4,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="all">
 
+    <group android:checkableBehavior="none">
+        <item
+            android:title="Filters"/>
         <item
             android:id="@+id/semester"
             app:actionLayout="@layout/spinner_2"
@@ -14,14 +16,14 @@
         <item
             android:id="@+id/year"
             app:actionLayout="@layout/spinner_3"
-            android:title="Semester"
+
+            android:title="Year"
             />
         <item
             android:id="@+id/course"
             app:actionLayout="@layout/spinner_test"
             android:title="Course"
             />
-
 
     </group>
 

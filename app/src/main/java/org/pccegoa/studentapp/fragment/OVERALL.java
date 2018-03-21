@@ -7,9 +7,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,11 +25,18 @@ import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import org.pccegoa.studentapp.R;
+import org.pccegoa.studentapp.adapter.TodayListAdapter;
 import org.pccegoa.studentapp.api.AttendanceApiClient;
 import org.pccegoa.studentapp.api.AttendanceClientCreator;
+import org.pccegoa.studentapp.api.AttendanceList;
 import org.pccegoa.studentapp.api.AttendancePercentile;
+import org.pccegoa.studentapp.api.AttendanceRecord;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import retrofit2.Call;
@@ -56,6 +65,8 @@ public class OVERALL extends Fragment {
     TextView attStatus;
     private OnFragmentInteractionListener mListener;
     private AttendanceApiClient mClient = null;
+    private Call<AttendanceList> attendanceListCall = null;
+    private Call<AttendancePercentile> attendancePercentileCall = null;
     public OVERALL() {
         // Required empty public constructor
     }
@@ -90,15 +101,84 @@ public class OVERALL extends Fragment {
 
     }
 
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         attChart=(PieChart) getView().findViewById(R.id.attendanceChart);
-
+        SwipeRefreshLayout swipeRefreshLayout = getView().findViewById(R.id.overallRefreshLayout);
+        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.primaryColor));
+        swipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                fetchAttendancePercentile();
+                fetchTodayAttendanceList();
+            }
+        });
         //updatePieChart(90.6f);
+        swipeRefreshLayout.setRefreshing(true);
         fetchAttendancePercentile();
+        fetchTodayAttendanceList();
+    }
+    
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(attendancePercentileCall != null && !attendancePercentileCall.isCanceled())
+            attendancePercentileCall.cancel();
+        if(attendanceListCall !=null && !attendanceListCall.isCanceled())
+            attendanceListCall.cancel();
     }
 
+    private void fetchTodayAttendanceList()
+    {
+        SharedPreferences preferences = getActivity().getSharedPreferences
+                (getString(R.string.shared_preference),Context.MODE_PRIVATE);
+        String rollNo = preferences.getString(getString(R.string.user_roll_no),null);
+        String apiToken = preferences.getString(getString(R.string.user_api_token_key),null);
+
+        SharedPreferences filterPreferences = getActivity().getSharedPreferences
+                (getString(R.string.shared_preference_filters),Context.MODE_PRIVATE);
+        Calendar calendar = GregorianCalendar.getInstance();
+
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+        String today = format.format(calendar.getTime());
+        int year = filterPreferences.getInt(getString(R.string.year_key),calendar.get(Calendar.YEAR));
+        int semester =  filterPreferences.getInt(getString(R.string.semester_key),1);
+        String auth = "Token "+apiToken;
+
+        attendanceListCall = mClient.getAttendancRecordsFromTo(auth,year,
+                semester,rollNo,today,today);
+        attendanceListCall.enqueue(new Callback<AttendanceList>() {
+            @Override
+            public void onResponse(Call<AttendanceList> call, Response<AttendanceList> response) {
+                AttendanceList attendanceList = response.body();
+                List<AttendanceRecord> records = attendanceList.getData();
+                TodayListAdapter adapter = new TodayListAdapter(getContext(),records);
+                ListView todayListView = getView().findViewById(R.id.att_list);
+                todayListView.setAdapter(adapter);
+                stopRefreshing();
+            }
+
+            @Override
+            public void onFailure(Call<AttendanceList> call, Throwable t) {
+                stopRefreshing();
+
+            }
+        });
+
+    }
+
+    private void stopRefreshing()
+    {
+        boolean condition = attendanceListCall.isExecuted() && attendancePercentileCall.isExecuted();
+        if(condition)
+        {
+            SwipeRefreshLayout swipeRefreshLayout = getView().findViewById(R.id.overallRefreshLayout);
+            swipeRefreshLayout.setRefreshing(false);
+        }
+    }
     private void fetchAttendancePercentile()
     {
         SharedPreferences preferences = getActivity().getSharedPreferences
@@ -106,22 +186,34 @@ public class OVERALL extends Fragment {
         int userId = preferences.getInt(getString(R.string.user_id_key),1);
         String apiToken = preferences.getString(getString(R.string.user_api_token_key),null);
 
-        //need to be modified
-        int year = 2018;
-        int semester = 6;
+        SharedPreferences filterPreferences = getActivity().getSharedPreferences
+                (getString(R.string.shared_preference_filters),Context.MODE_PRIVATE);
+        Calendar calendar = GregorianCalendar.getInstance();
+        int year = filterPreferences.getInt(getString(R.string.year_key),calendar.get(Calendar.YEAR));
+        int semester =  filterPreferences.getInt(getString(R.string.semester_key),1);
+
         String auth = "Token "+apiToken;
-        Call<AttendancePercentile> call = mClient.getAttendancePercentile(auth,year,semester,userId);
-        call.enqueue(new Callback<AttendancePercentile>() {
+        attendancePercentileCall = mClient.getAttendancePercentile(auth,year,semester,userId);
+       attendancePercentileCall.enqueue(new Callback<AttendancePercentile>() {
             @Override
             public void onResponse(Call<AttendancePercentile> call, Response<AttendancePercentile> response) {
                 AttendancePercentile percentile = response.body();
+                stopRefreshing();
+                if (percentile == null  && getContext()!=null)
+                {
+                    Toast.makeText(getContext(), "Attendance Not Found", Toast.LENGTH_SHORT).show();
+                    updatePieChart(0f);
+                    return;
+                }
                 updatePieChart(percentile.getPercentile());
 
             }
 
             @Override
             public void onFailure(Call<AttendancePercentile> call, Throwable t) {
-                Toast.makeText(getContext(), "Some Error Occurred", Toast.LENGTH_SHORT).show();
+                if(getContext()!=null)
+                    Toast.makeText(getContext(), "Some Error Occurred", Toast.LENGTH_SHORT).show();
+                stopRefreshing();
             }
         });
     }
@@ -132,12 +224,8 @@ public class OVERALL extends Fragment {
         entries.add(new PieEntry(100-percentile, "ABSENT"));
         PieDataSet set = new PieDataSet(entries, "ATTENDANCE");
         set.setColors(ColorTemplate.MATERIAL_COLORS);
-        //int[] colors = {getContext().getResources().getColor(R.color.primaryColor),
-               // getContext().getResources().getColor(R.color.primaryLightColor)};
-        //set.setColors(colors);
-
         PieData data = new PieData(set);
-        data.setValueTextSize(15f);
+        data.setValueTextSize(12f);
         data.setValueTextColor(Color.BLACK);
         attChart.setData(data);
         set.setValueFormatter(new PercentFormatter());

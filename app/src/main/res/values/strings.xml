@@ -12,7 +12,12 @@
     <string name="user_id_key">org.pccegoa.studentapp.shared_preference.user_id</string>
     <string name="user_roll_no">org.pccegoa.studentapp.shared_preference.roll_no</string>
 
-    <string name="title_activity_home">HomeActivity</string>
+    <string name="shared_preference_filters">org.pccegoa.studentapp.shared_preference_filters</string>
+    <string name="semester_key">org.pccegoa.studentapp.shared_preference_filters.semester_key</string>
+    <string name="year_key">org.pccegoa.studentapp.shared_preference_filters.year_key</string>
+    <string name="course_key">org.pccegoa.studentapp.shared_preference_filters.course_key</string>
+
+    <string name="title_activity_home">Dashboard</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
@@ -22,9 +27,10 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string-array name="Course">
-        <item>RC 07-08</item>
-        <item>RC 16-17</item>
+        <item>RC07-08</item>
+        <item>RC16-17</item>
     </string-array>
+
     <string-array name="Semester">
         <item>1</item>
         <item>2</item>

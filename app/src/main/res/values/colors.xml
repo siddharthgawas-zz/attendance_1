@@ -12,4 +12,6 @@
     <color name="splashBackground">#c13633</color>
     <color name="splashBackground2">#3388c1</color>
     <color name="whatNextButton">#c0ca33</color>
+    <color name="greenSafe">#7cb342</color>
+    <color name="yellowDanger">#fbc02d</color>
 </resources>
