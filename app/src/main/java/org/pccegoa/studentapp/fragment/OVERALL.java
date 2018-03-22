@@ -1,16 +1,19 @@
 package org.pccegoa.studentapp.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,12 +21,16 @@ import android.widget.Toast;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
+import org.pccegoa.studentapp.DetailActivity;
 import org.pccegoa.studentapp.R;
 import org.pccegoa.studentapp.adapter.TodayListAdapter;
 import org.pccegoa.studentapp.api.AttendanceApiClient;
@@ -59,8 +66,8 @@ public class OVERALL extends Fragment {
 
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private final static String PRESENT = "PRESENT";
+    private final static String ABSENT = "ABSENT";
     PieChart attChart;
     TextView attStatus;
     private OnFragmentInteractionListener mListener;
@@ -92,11 +99,6 @@ public class OVERALL extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
         mClient = AttendanceClientCreator.createApiClient();
 
     }
@@ -106,6 +108,44 @@ public class OVERALL extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         attChart=(PieChart) getView().findViewById(R.id.attendanceChart);
+
+        attChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+                PieEntry entry = (PieEntry)e;
+                Intent i = new Intent(getActivity(),DetailActivity.class);
+                if(entry.getLabel().equals(PRESENT))
+                    i.putExtra(DetailActivity.FETCH_ARGUMENT,DetailActivity.FETCH_PRESENT);
+                else if (entry.getLabel().equals(ABSENT))
+                    i.putExtra(DetailActivity.FETCH_ARGUMENT,DetailActivity.FETCH_ABSENT);
+                startActivity(i);
+            }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });
+        ListView todayListView = getView().findViewById(R.id.att_list);
+        todayListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TodayListAdapter adapter = (TodayListAdapter) parent.getAdapter();
+                AttendanceRecord record = adapter.getItem(position);
+                DialogFragment dialogFragment = new AttendanceRecordDialog();
+
+                Bundle arguments = new Bundle();
+                arguments.putString(AttendanceRecordDialog.ARG_SUBJECT_NAME,record.getSubject_name());
+                arguments.putString(AttendanceRecordDialog.ARG_FACULTY_NAME,record.getFaculty_name());
+                arguments.putString(AttendanceRecordDialog.ARG_ATTENDANCE_STATUS,record.getAtt_status());
+                arguments.putString(AttendanceRecordDialog.ARG_DATE,record.getDate_of_attendance());
+                arguments.putString(AttendanceRecordDialog.ARG_SUBJECT_TYPE,
+                        record.getSubject_type());
+                dialogFragment.setArguments(arguments);
+
+                dialogFragment.show(getActivity().getSupportFragmentManager(),"Details");
+            }
+        });
         SwipeRefreshLayout swipeRefreshLayout = getView().findViewById(R.id.overallRefreshLayout);
         swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.primaryColor));
         swipeRefreshLayout.setOnRefreshListener(
@@ -220,8 +260,8 @@ public class OVERALL extends Fragment {
     public void updatePieChart(float percentile) {
         List<PieEntry> entries = new ArrayList<>();
 
-        entries.add(new PieEntry(percentile, "PRESENT"));
-        entries.add(new PieEntry(100-percentile, "ABSENT"));
+        entries.add(new PieEntry(percentile, PRESENT));
+        entries.add(new PieEntry(100-percentile, ABSENT));
         PieDataSet set = new PieDataSet(entries, "ATTENDANCE");
         set.setColors(ColorTemplate.MATERIAL_COLORS);
         PieData data = new PieData(set);

@@ -19,12 +19,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity"></activity>
-        <activity android:name=".TutorialActivity"></activity>
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".TutorialActivity" />
         <activity
             android:name=".HomeActivity"
             android:label="@string/title_activity_home"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".DetailActivity"
+            android:parentActivityName=".HomeActivity"
+            android:exported="true">
+        </activity>
     </application>
 
 </manifest>

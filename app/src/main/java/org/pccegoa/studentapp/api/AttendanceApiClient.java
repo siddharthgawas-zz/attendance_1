@@ -30,4 +30,22 @@ public interface AttendanceApiClient {
                                              @Path("rollNo") String rollNo,
                                              @Query("from_date") String fromDate,
                                              @Query("to_date") String toDate);
+
+    @Headers("X-Application-Key: "+APPLICATION_KEY)
+    @GET("get-attendance-details/{fetchMark}/{year}/{semester}/{userId}/")
+    Call<AttendanceList> getAttendanceDetailsFromTo(@Header("Authorization") String authorization,
+                                                    @Path("fetchMark") String fetchMark,
+                                                    @Path("year") int year,
+                                                    @Path("semester") int semester,
+                                                    @Path("userId") int userId,
+                                                    @Query("from_date") String fromDate,
+                                                    @Query("to_date") String toDate);
+
+    @Headers("X-Application-Key: "+APPLICATION_KEY)
+    @GET("get-attendance/{year}/{semester}/{rollNo}/")
+    Call<AttendanceList> getAllAttendanceByMark(@Header("Authorization") String authorization,
+                                                          @Path("year") int year,
+                                                          @Path("semester") int semester,
+                                                          @Path("rollNo") String rollNo,
+                                                          @Query("mark")String mark);
 }
