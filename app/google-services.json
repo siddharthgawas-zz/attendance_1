@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "358749148381",
+    "firebase_url": "https://attendance1-149b4.firebaseio.com",
+    "project_id": "attendance1-149b4",
+    "storage_bucket": "attendance1-149b4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:358749148381:android:901cba2d62aa841f",
+        "android_client_info": {
+          "package_name": "org.pccegoa.studentapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "358749148381-taqe00gptisskk0fppoafeq7gfil1mde.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.pccegoa.studentapp",
+            "certificate_hash": "b9100ee6cecee672f2ada554f0ed19e2148c7bc7"
+          }
+        },
+        {
+          "client_id": "358749148381-uu9foeeig308rkuf841emp3h2o484bsi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6P_5EiqrdVQgfWU9ciJb9gTKwJuNteSM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "358749148381-uu9foeeig308rkuf841emp3h2o484bsi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -38,6 +38,7 @@ import org.pccegoa.studentapp.api.AttendanceClientCreator;
 import org.pccegoa.studentapp.api.AttendanceList;
 import org.pccegoa.studentapp.api.AttendancePercentile;
 import org.pccegoa.studentapp.api.AttendanceRecord;
+import org.pccegoa.studentapp.utility.AttendancePredictor;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -68,6 +69,7 @@ public class OVERALL extends Fragment {
     // TODO: Rename and change types of parameters
     private final static String PRESENT = "PRESENT";
     private final static String ABSENT = "ABSENT";
+    public final static float ATTENDANCE_CUTOFF = 0.75f;
     PieChart attChart;
     TextView attStatus;
     private OnFragmentInteractionListener mListener;
@@ -245,6 +247,7 @@ public class OVERALL extends Fragment {
                     updatePieChart(0f);
                     return;
                 }
+                makePredication(percentile);
                 updatePieChart(percentile.getPercentile());
 
             }
@@ -256,6 +259,22 @@ public class OVERALL extends Fragment {
                 stopRefreshing();
             }
         });
+    }
+    private void makePredication(AttendancePercentile percentile)
+    {
+        int p = percentile.getP_count();
+        int a = percentile.getA_count();
+        int d = percentile.getD_count();
+        AttendancePredictor predictor = new AttendancePredictor(ATTENDANCE_CUTOFF);
+        int attend = predictor.classesToAttend(p,a,d);
+        int bunk = predictor.classesToBunk(p,a,d);
+        String predictionText = null;
+        if(attend > 0)
+            predictionText = "Attend "+attend+" or more classes to avoid trouble.";
+        else
+            predictionText = "Safe to bunk "+bunk+" and still avoid trouble.";
+        TextView textView = getView().findViewById(R.id.predictTextView);
+        textView.setText(predictionText);
     }
     public void updatePieChart(float percentile) {
         List<PieEntry> entries = new ArrayList<>();
