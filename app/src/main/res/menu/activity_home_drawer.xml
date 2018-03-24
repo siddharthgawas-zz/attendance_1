@@ -39,5 +39,17 @@
                 android:title="Change Password" />
         </menu>
     </item>
+    <item android:title="ABOUT">
+        <menu>
+            <item
+                android:id="@+id/about_app"
+                android:icon="@drawable/ic_smartphone"
+                android:title="App" />
+            <item
+                android:id="@+id/developers"
+                android:icon="@drawable/ic_boss"
+                android:title="Developers" />
+        </menu>
+    </item>
 
 </menu>
