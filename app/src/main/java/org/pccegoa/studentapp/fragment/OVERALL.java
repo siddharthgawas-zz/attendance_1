@@ -215,9 +215,10 @@ public class OVERALL extends Fragment {
     private void stopRefreshing()
     {
         boolean condition = attendanceListCall.isExecuted() && attendancePercentileCall.isExecuted();
-        if(condition)
+        View view =  getView();
+        if(condition && view!=null)
         {
-            SwipeRefreshLayout swipeRefreshLayout = getView().findViewById(R.id.overallRefreshLayout);
+            SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.overallRefreshLayout);
             swipeRefreshLayout.setRefreshing(false);
         }
     }

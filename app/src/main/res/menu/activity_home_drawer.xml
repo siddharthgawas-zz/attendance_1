@@ -31,11 +31,11 @@
         <menu>
             <item
                 android:id="@+id/Logout"
-                android:icon="@drawable/signout"
+                android:icon="@drawable/ic_logout"
                 android:title="Logout" />
             <item
                 android:id="@+id/changePassword"
-                android:icon="@drawable/passwordreset"
+                android:icon="@drawable/ic_key"
                 android:title="Change Password" />
         </menu>
     </item>

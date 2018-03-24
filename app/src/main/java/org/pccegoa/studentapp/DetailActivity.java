@@ -219,6 +219,8 @@ public class DetailActivity extends AppCompatActivity implements
         SimpleDateFormat format = new SimpleDateFormat("dd/MMM/yy");
         String dateString = format.format(mDateFilter.getTime());
         mDateTextView.setText(dateString);
+        mSwipeRefreshLayout.setRefreshing(true);
+        fetchAttendanceDetails();
     }
 
     @Override
