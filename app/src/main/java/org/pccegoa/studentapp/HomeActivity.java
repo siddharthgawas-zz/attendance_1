@@ -1,5 +1,10 @@
 package org.pccegoa.studentapp;
 
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.listener.OnChartGestureListener;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -35,6 +40,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity
+
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private Toolbar toolbar;
