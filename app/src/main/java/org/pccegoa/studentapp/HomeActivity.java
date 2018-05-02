@@ -165,7 +165,7 @@ public class HomeActivity extends AppCompatActivity
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new OVERALL(), "OVERALL");
-        adapter.addFragment(new WEEKLY(), "WEEKLY");
+        //adapter.addFragment(new WEEKLY(), "WEEKLY");
         adapter.addFragment(new SUBJECT(), "SUBJECT");
         viewPager.setAdapter(adapter);
     }

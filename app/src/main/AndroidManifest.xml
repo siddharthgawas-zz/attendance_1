@@ -27,9 +27,9 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".DetailActivity"
-            android:parentActivityName=".HomeActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true"
+            android:parentActivityName=".HomeActivity"></activity>
+        <activity android:name=".ChangePasswordActivity"></activity>
     </application>
 
 </manifest>
